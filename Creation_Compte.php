@@ -6,7 +6,7 @@ if (
 ) {
     $newPass = password_hash($_POST['newPass'], PASSWORD_DEFAULT);
     $bdd = mysqli_init();
-    mysqli_real_connect($bdd, "127.0.0.1", "campagne.a", "AllenWalker59", "gestion_employer");
+    mysqli_real_connect($bdd, "127.0.0.1", "campagne.a", "12345", "gestion_employer");
     $requete = "insert into userconnect (UserMail, PassWord, Profil) values ('$_POST[newUser]', '$newPass', 'User');";
     $result = mysqli_query($bdd, $requete);
     $bdd->close();
