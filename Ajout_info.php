@@ -1,4 +1,6 @@
 <?php
+include("Connection_Mysqli.php");
+
 $noemp = $_POST["noemp"];
 $nom = $_POST["nom"];
 $prenom = $_POST["prenom"];
@@ -12,9 +14,6 @@ $noproj = $_POST["noproj"];
 
 $isThereError = false;
 $message = "";
-
-$bdd = mysqli_init();
-mysqli_real_connect($bdd, "127.0.0.1", "AdminAlex", "12345", "gestion_employer");
 
 if (empty($noemp) || preg_match("#^[0-9]{4}$#", $noemp)) {
 } else {
@@ -68,11 +67,16 @@ if (empty($noproj) || preg_match("#^10[0-9]$#", $noproj)) {
 }
 
 if (!$isThereError) {
-    $sql = "insert into employes2 values('$noemp', '$nom', '$prenom', '$emploi', $sup , '$embauche', $sal, $comm, $noserv, $noproj, CURDATE())";
-    mysqli_query($bdd, $sql);
-    $bdd->close();
+    ajoutEmploye($noemp, $nom, $prenom, $emploi, $sup, $embauche, $sal, $comm, $noserv, $noproj);
     header("Location: Affiche_Fichier.php");
 } else {
-    $bdd->close();
     header("Location: Test_formulaire.php?error=$message");
+}
+
+function ajoutEmploye($noemp, $nom, $prenom, $emploi, $sup, $embauche, $sal, $comm, $noserv, $noproj)
+{
+    $bdd = connectionMysqli();
+    $sql = "insert into employes2 values('$noemp', '$nom', '$prenom', '$emploi', $sup , '$embauche', $sal, $comm, $noserv, $noproj, CURDATE())";
+    mysqli_query($bdd, $sql);
+    mysqli_close($bdd);
 }

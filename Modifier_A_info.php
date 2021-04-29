@@ -1,20 +1,23 @@
 <?php
 session_start();
-$pos = $_POST["noemp"];
-$nom = $_POST["nom"];
-$prenom = $_POST["prenom"];
-$emploi = $_POST["emploi"];
-$sup = $_POST["sup"];
-$sal = $_POST["sal"];
-$comm = $_POST["comm"];
-$noserv = $_POST["noserv"];
-$noproj = $_POST["noproj"];
+include("Connection_Mysqli.php");
 
+modifierInfo(
+    $_POST["noemp"],
+    $_POST["nom"],
+    $_POST["prenom"],
+    $_POST["emploi"],
+    $_POST["sup"],
+    $_POST["sal"],
+    $_POST["comm"],
+    $_POST["noserv"],
+    $_POST["noproj"]
+);
 
-
-$bdd = mysqli_init();
-mysqli_real_connect($bdd, "127.0.0.1", "AdminAlex", "12345", "gestion_employer");
-$sql = "update employes2 set 
+function modifierInfo($pos, $nom, $prenom, $emploi, $sup, $sal, $comm, $noserv, $noproj)
+{
+    $bdd = connectionMysqli();
+    $sql = "update employes2 set 
     nom = '$nom',
     prenom = '$prenom',
     emploi = '$emploi',
@@ -24,8 +27,8 @@ $sql = "update employes2 set
     noserv = '$noserv',
     noproj = '$noproj'
     where noemp = '$pos';";
-mysqli_query($bdd, $sql);
-$bdd->close();
-
+    mysqli_query($bdd, $sql);
+    mysqli_close($bdd);
+}
 
 header("Location: Affiche_Fichier.php");
