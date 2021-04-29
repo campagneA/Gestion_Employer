@@ -1,0 +1,10 @@
+1;Campagne;Alexandre;0634641984;campagne.a@hotmail.fr
+2;Alpha;Robert;0641578517;Alpha.r@hotmail.fr
+3;Beta;Amelie;0700001010;Beta.o@hotmail.fr
+5;Echo;Laurie;0675123652;Echo.l@hotmail.fr
+7;Walker;Eren;0755112233;walker.e@hotmail.fr
+8;Brigant;Mickael;0754545454;brigant.m@hotmail.fr
+9;McKlain;Jordan;0744882266;McKlain.j@hotmail.fr
+10;Delta;Brad;0777777777;Delta.b@hotmail.fr
+11;Batman;Alfred;0655555555;Batman.a@hotmail.fr
+12;Vagabond;Laurent;0777777777;Vagabond.l@hotmail.fr
