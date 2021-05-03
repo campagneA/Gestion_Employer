@@ -76,7 +76,8 @@ if (!$isThereError) {
 function ajoutEmploye($noemp, $nom, $prenom, $emploi, $sup, $embauche, $sal, $comm, $noserv, $noproj)
 {
     $bdd = connectionMysqli();
-    $sql = "insert into employes2 values('$noemp', '$nom', '$prenom', '$emploi', $sup , '$embauche', $sal, $comm, $noserv, $noproj, CURDATE())";
-    mysqli_query($bdd, $sql);
-    mysqli_close($bdd);
+    // $sql = "insert into employes2 values('$noemp', '$nom', '$prenom', '$emploi', $sup , '$embauche', $sal, $comm, $noserv, $noproj, CURDATE())";
+    // mysqli_query($bdd, $sql);
+    $bdd->query("insert into employes2 values('$noemp', '$nom', '$prenom', '$emploi', $sup , '$embauche', $sal, $comm, $noserv, $noproj, CURDATE())");
+    $bdd->close();
 }

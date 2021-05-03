@@ -6,7 +6,8 @@ if (
     && preg_match('#^([\w\.-.]+)@([\w\.-]+)(\.[a-z]{2,4})$#', $_POST['newUser'])
     && $_POST['newPass'] == $_POST['newPassConf']
 ) {
-    creationCompte($_POST['newUser'], $_POST['newPass']);
+    $pass = password_hash($_POST['newPass'], PASSWORD_DEFAULT);
+    creationCompte($_POST['newUser'], $pass);
     header("location: Connection.php");
 } else {
     header("location: New_Compte.php?error=error");
@@ -14,9 +15,10 @@ if (
 
 function creationCompte($newUser, $newPass)
 {
-    $pass = password_hash($newPass, PASSWORD_DEFAULT);
     $bdd = connectionMysqli();
-    $requete = "insert into userconnect (UserMail, PassWord, Profil) values ('$newUser', '$pass', 'User');";
-    mysqli_query($bdd, $requete);
-    mysqli_close($bdd);
+    // $requete = "insert into userconnect (UserMail, PassWord, Profil) values ('$newUser', '$pass', 'User');";
+    // mysqli_query($bdd, $requete);
+    $bdd->query("insert into userconnect (UserMail, PassWord, Profil) values ('$newUser', '$newPass', 'User');");
+    // mysqli_close($bdd);
+    $bdd->close();
 }

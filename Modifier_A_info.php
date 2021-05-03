@@ -17,7 +17,7 @@ modifierInfo(
 function modifierInfo($pos, $nom, $prenom, $emploi, $sup, $sal, $comm, $noserv, $noproj)
 {
     $bdd = connectionMysqli();
-    $sql = "update employes2 set 
+    $bdd->query("update employes2 set 
     nom = '$nom',
     prenom = '$prenom',
     emploi = '$emploi',
@@ -26,9 +26,8 @@ function modifierInfo($pos, $nom, $prenom, $emploi, $sup, $sal, $comm, $noserv, 
     comm = '$comm',
     noserv = '$noserv',
     noproj = '$noproj'
-    where noemp = '$pos';";
-    mysqli_query($bdd, $sql);
-    mysqli_close($bdd);
+    where noemp = '$pos';");
+    $bdd->close();
 }
 
 header("Location: Affiche_Fichier.php");
