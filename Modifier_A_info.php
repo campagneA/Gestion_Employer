@@ -14,19 +14,21 @@ modifierInfo(
     $_POST["noproj"]
 );
 
-function modifierInfo($pos, $nom, $prenom, $emploi, $sup, $sal, $comm, $noserv, $noproj)
+function modifierInfo($noemp, $nom, $prenom, $emploi, $sup, $sal, $comm, $noserv, $noproj)
 {
     $bdd = connectionMysqli();
-    $bdd->query("update employes2 set 
-    nom = '$nom',
-    prenom = '$prenom',
-    emploi = '$emploi',
-    sup = '$sup',
-    sal = '$sal',
-    comm = '$comm',
-    noserv = '$noserv',
-    noproj = '$noproj'
-    where noemp = '$pos';");
+    $stmt = $bdd->prepare("update employes2 set
+    nom = ?,
+    prenom = ?,
+    emploi = ?,
+    sup = ?,
+    sal = ?,
+    comm = ?,
+    noserv = ?,
+    noproj = ?
+    where noemp = $noemp;");
+    $stmt->bind_param("sssiiiii", $nom, $prenom, $emploi, $sup, $sal, $comm, $noserv, $noproj);
+    $stmt->execute();
     $bdd->close();
 }
 

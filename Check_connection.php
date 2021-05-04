@@ -14,10 +14,13 @@ if (!empty($sql) && isset($sql) && password_verify($_POST['passWord'], $sql['Pas
 function checkConnection($userMail)
 {
     $bdd = connectionMysqli();
-    // $requete = "select * from userconnect where UserMail = '$userMail';";
-    // $result = mysqli_query($bdd, $requete);
-    $requete = $bdd->query("select * from userconnect where UserMail = '$userMail';");
-    $data = $requete->fetch_array($requete, MYSQLI_ASSOC);
+    $stmt = $bdd->prepare("select * from userconnect where UserMail = '$userMail';");
+    // $requete = $bdd->query("select * from userconnect where UserMail = '$userMail';");
+    $stmt->bind_param("s", $userMail);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $data = $result->fetch_array(MYSQLI_ASSOC);
+    $result->free();
     $bdd->close();
     return $data;
 }

@@ -1,4 +1,5 @@
-<?php session_start(); ?>
+<?php session_start();
+include("Connection_Mysqli.php"); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -80,7 +81,7 @@
     <?php
     if (!empty($_SESSION['userMail']) && isset($_SESSION['userMail'])) { ?>
         <ul>
-            <li><a href="Deconnection.php">Deconnection</a></li>
+            <li><a href="Deconnexion.php">Deconnexion</a></li>
         </ul>
     <?php } else { ?>
         <ul>
@@ -89,17 +90,13 @@
     <?php
     }
     if (!empty($_SESSION['userMail']) && isset($_SESSION['userMail'])) {
-        $bdd = mysqli_init();
-        mysqli_real_connect($bdd, "127.0.0.1", "campagne.a", "AllenWalker59", "gestion_employer");
-        $result = mysqli_query($bdd, "select * from employes2");
+        $result = afficheInfo();
+        $nbr = compteurAjout();
 
-        $nbrAjout = mysqli_query($bdd, "select count(*) from employes2 where date_ajout = CURDATE();");
-        $nbrA = mysqli_fetch_all($nbrAjout);
-        $nbr = $nbrA[0];
         echo "<h5 class='position-compteur'>Nombre d'Ajout Aujourd'hui : $nbr[0] </h5>";
 
-        $condition = mysqli_query($bdd, "select noemp from employes2 where noemp in (select sup from employes2);");
-        $listeSup = mysqli_fetch_all($condition);
+
+        $listeSup = droitAdmin();
         $finalListeSup = [];
         foreach ($listeSup as $sup) {
             $finalListeSup[] = $sup[0];
@@ -113,7 +110,7 @@
             echo "<th>#</th><th>#</th>";
         }
         echo "</tr>";
-        while ($data = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+        foreach ($result as $data) {
             echo "<tr>";
             echo "<td>" . $data["noemp"] . "</td>";
             echo "<td>" . $data["nom"] . "</td>";
@@ -139,11 +136,45 @@
             echo "</tr>";
         }
         echo "</table>";
-        $bdd->close();
     }
     ?>
     <a href="Test_formulaire.php" type="button" class="button-retour-bot">Retour</a>
 
+    <?php
+    function afficheInfo()
+    {
+        $bdd = connectionMysqli();
+        $stmt = $bdd->prepare("select * from employes2");
+        $stmt->execute();
+        $rs = $stmt->get_result();
+        $data = $rs->fetch_all(MYSQLI_ASSOC);
+        $bdd->close();
+        return $data;
+    }
+
+    function compteurAjout()
+    {
+        $bdd = connectionMysqli();
+        $stmt = $bdd->prepare("select count(*) from employes2 where date_ajout = CURDATE();");
+        $stmt->execute();
+        $rs = $stmt->get_result();
+        $nbrA = $rs->fetch_all();
+        $rs->free();
+        return $nbrA[0];
+    }
+
+    function droitAdmin()
+    {
+        $bdd = connectionMysqli();
+        $stmt = $bdd->prepare("select noemp from employes2 where noemp in (select sup from employes2);");
+        $stmt->execute();
+        $rs = $stmt->get_result();
+        $data = $rs->fetch_all(MYSQLI_NUM);
+        $bdd->close();
+        return $data;
+    }
+
+    ?>
 </body>
 
 </html>

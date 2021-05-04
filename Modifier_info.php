@@ -1,4 +1,5 @@
-<?php session_start(); ?>
+<?php session_start();
+include("Connection_Mysqli.php"); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -38,11 +39,8 @@
 <body>
     <?php
     if (!empty($_SESSION['userMail']) && isset($_SESSION['userMail'])) {
-        $pos = $_GET["id"];
-        $bdd = mysqli_init();
-        mysqli_real_connect($bdd, "127.0.0.1", "campagne.a", "AllenWalker59", "gestion_employer");
-        $result = mysqli_query($bdd, "select nom, prenom, emploi, sup, sal, comm, noserv, noproj, noemp from employes2 where noemp = $pos");
-        while ($data = mysqli_fetch_array($result)) {
+        $result = afficheInfoModifier($_GET["id"]);
+        foreach ($result as $data) {
             echo "<form method='POST' action='Modifier_A_info.php'><table class='table table-dark table-striped text-center'>";
             echo "<caption type='number' class='form-control text-center' name='noemp'>" . $data['noemp'] . "</caption>";
             echo "<tr><th>nom</th><th>prenom</th><th>emploi</th><th>sup</th><th>sal</th><th>comm</th><th>noserv</th><th>noproj</th><th>#</th></tr>";
@@ -58,12 +56,21 @@
             echo "<td><input type='submit' class='btn btn-warning btn-sm' value='submit' name='submit'></td>";
             echo "</tr></table><input type='hidden' name='noemp' value='$data[noemp]'></form>";
         }
-
-
-        $bdd->close();
     }
     echo "<a href='Affiche_Fichier.php'>retour</a>";
     ?>
 </body>
+<?php
+function afficheInfoModifier($noemp)
+{
+    $bdd = connectionMysqli();
+    $stmt = $bdd->prepare("select * from employes2 where noemp = $noemp");
+    $stmt->execute();
+    $rs = $stmt->get_result();
+    $data = $rs->fetch_all(MYSQLI_ASSOC);
+    $bdd->close();
+    return $data;
+}
+?>
 
 </html>

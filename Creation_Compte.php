@@ -16,9 +16,8 @@ if (
 function creationCompte($newUser, $newPass)
 {
     $bdd = connectionMysqli();
-    // $requete = "insert into userconnect (UserMail, PassWord, Profil) values ('$newUser', '$pass', 'User');";
-    // mysqli_query($bdd, $requete);
-    $bdd->query("insert into userconnect (UserMail, PassWord, Profil) values ('$newUser', '$newPass', 'User');");
-    // mysqli_close($bdd);
+    $stmt = $bdd->prepare("insert into userconnect (UserMail, PassWord, Profil) values ('$newUser', '$newPass', 'User');");
+    $stmt->bind_param("ss", $newUser, $newPass);
+    $stmt->execute();
     $bdd->close();
 }
