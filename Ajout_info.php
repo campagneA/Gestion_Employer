@@ -1,5 +1,6 @@
 <?php
 include("Connection_Mysqli.php");
+include_once(__DIR__ . "/DAO/EmployeDAO.php");
 
 $noemp = $_POST["noemp"];
 $nom = $_POST["nom"];
@@ -67,17 +68,9 @@ if (empty($noproj) || preg_match("#^10[0-9]$#", $noproj)) {
 }
 
 if (!$isThereError) {
-    ajoutEmploye($noemp, $nom, $prenom, $emploi, $sup, $embauche, $sal, $comm, $noserv, $noproj);
+    $employeService = new EmployeService();
+    $employeService->ajoutEmploye($noemp, $nom, $prenom, $emploi, $sup, $embauche, $sal, $comm, $noserv, $noproj);
     header("Location: Affiche_Fichier.php");
 } else {
     header("Location: Test_formulaire.php?error=$message");
-}
-
-function ajoutEmploye($noemp, $nom, $prenom, $emploi, $sup, $embauche, $sal, $comm, $noserv, $noproj)
-{
-    $bdd = connectionMysqli();
-    $stmt = $bdd->prepare("insert into employes2 values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURDATE())");
-    $stmt->bind_param("isssisddii", $noemp, $nom, $prenom, $emploi, $sup, $embauche, $sal, $comm, $noserv, $noproj);
-    $stmt->execute();
-    $bdd->close();
 }

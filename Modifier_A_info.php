@@ -1,35 +1,19 @@
 <?php
 session_start();
 include("Connection_Mysqli.php");
+include_once(__DIR__ . "/Service/EmployeService.php");
 
-modifierInfo(
-    $_POST["noemp"],
-    $_POST["nom"],
-    $_POST["prenom"],
-    $_POST["emploi"],
-    $_POST["sup"],
-    $_POST["sal"],
-    $_POST["comm"],
-    $_POST["noserv"],
-    $_POST["noproj"]
-);
-
-function modifierInfo($noemp, $nom, $prenom, $emploi, $sup, $sal, $comm, $noserv, $noproj)
-{
-    $bdd = connectionMysqli();
-    $stmt = $bdd->prepare("update employes2 set
-    nom = ?,
-    prenom = ?,
-    emploi = ?,
-    sup = ?,
-    sal = ?,
-    comm = ?,
-    noserv = ?,
-    noproj = ?
-    where noemp = $noemp;");
-    $stmt->bind_param("sssiiiii", $nom, $prenom, $emploi, $sup, $sal, $comm, $noserv, $noproj);
-    $stmt->execute();
-    $bdd->close();
-}
+$employe = (new Employe)
+    ->setNoemp($_POST["noemp"])
+    ->setNom($_POST["nom"])
+    ->setPrenom($_POST["prenom"])
+    ->setEmploi($_POST["emploi"])
+    ->setSup($_POST["sup"])
+    ->setSal($_POST["sal"])
+    ->setComm($_POST["comm"])
+    ->setNoserv($_POST["noserv"])
+    ->setNoproj($_POST["noproj"]);
+$employeService = new employeService;
+$employeService->modifierInfo($employe);
 
 header("Location: Affiche_Fichier.php");

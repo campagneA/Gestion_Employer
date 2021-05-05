@@ -1,5 +1,7 @@
 <?php session_start();
-include("Connection_Mysqli.php"); ?>
+include("Connection_Mysqli.php");
+include_once(__DIR__ . "/Service/EmployeService.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -89,14 +91,15 @@ include("Connection_Mysqli.php"); ?>
         </ul>
     <?php
     }
-    if (!empty($_SESSION['userMail']) && isset($_SESSION['userMail'])) {
-        $result = afficheInfo();
-        $nbr = compteurAjout();
+    if (isset($_SESSION['userMail']) && !empty($_SESSION['userMail'])) {
+        $employeService = new EmployeService;
+        $result = $employeService->searchInfo();
+        $nbr = $employeService->compteurAjout();
 
-        echo "<h5 class='position-compteur'>Nombre d'Ajout Aujourd'hui : $nbr[0] </h5>";
+        echo "<h5 class='position-compteur'>Nombre d'Ajout Aujourd'hui : $nbr </h5>";
 
 
-        $listeSup = droitAdmin();
+        $listeSup = $employeService->droitAdmin();
         $finalListeSup = [];
         foreach ($listeSup as $sup) {
             $finalListeSup[] = $sup[0];
@@ -140,41 +143,6 @@ include("Connection_Mysqli.php"); ?>
     ?>
     <a href="Test_formulaire.php" type="button" class="button-retour-bot">Retour</a>
 
-    <?php
-    function afficheInfo()
-    {
-        $bdd = connectionMysqli();
-        $stmt = $bdd->prepare("select * from employes2");
-        $stmt->execute();
-        $rs = $stmt->get_result();
-        $data = $rs->fetch_all(MYSQLI_ASSOC);
-        $bdd->close();
-        return $data;
-    }
-
-    function compteurAjout()
-    {
-        $bdd = connectionMysqli();
-        $stmt = $bdd->prepare("select count(*) from employes2 where date_ajout = CURDATE();");
-        $stmt->execute();
-        $rs = $stmt->get_result();
-        $nbrA = $rs->fetch_all();
-        $rs->free();
-        return $nbrA[0];
-    }
-
-    function droitAdmin()
-    {
-        $bdd = connectionMysqli();
-        $stmt = $bdd->prepare("select noemp from employes2 where noemp in (select sup from employes2);");
-        $stmt->execute();
-        $rs = $stmt->get_result();
-        $data = $rs->fetch_all(MYSQLI_NUM);
-        $bdd->close();
-        return $data;
-    }
-
-    ?>
 </body>
 
 </html>

@@ -1,5 +1,6 @@
 <?php session_start();
-include("Connection_Mysqli.php"); ?>
+include("Connection_Mysqli.php");
+include_once(__DIR__ . "/DAO/Employe_DAO.php"); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -39,7 +40,8 @@ include("Connection_Mysqli.php"); ?>
 <body>
     <?php
     if (!empty($_SESSION['userMail']) && isset($_SESSION['userMail'])) {
-        $result = afficheInfoModifier($_GET["id"]);
+        $employeService = new EmployeService;
+        $result = $employeService->searchInfoModifier($_GET["id"]);
         foreach ($result as $data) {
             echo "<form method='POST' action='Modifier_A_info.php'><table class='table table-dark table-striped text-center'>";
             echo "<caption type='number' class='form-control text-center' name='noemp'>" . $data['noemp'] . "</caption>";
@@ -60,17 +62,5 @@ include("Connection_Mysqli.php"); ?>
     echo "<a href='Affiche_Fichier.php'>retour</a>";
     ?>
 </body>
-<?php
-function afficheInfoModifier($noemp)
-{
-    $bdd = connectionMysqli();
-    $stmt = $bdd->prepare("select * from employes2 where noemp = $noemp");
-    $stmt->execute();
-    $rs = $stmt->get_result();
-    $data = $rs->fetch_all(MYSQLI_ASSOC);
-    $bdd->close();
-    return $data;
-}
-?>
 
 </html>
