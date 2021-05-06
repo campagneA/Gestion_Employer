@@ -3,10 +3,10 @@ include_once(__DIR__ . "/../DAO/UserDAO.php");
 
 class UserService
 {
-    public function checkConnection($userMail)
+    public function checkConnexion($userMail)
     {
         $userDAO = new UserDAO;
-        $sql = $userDAO->checkConnection($userMail);
+        $sql = $userDAO->checkConnexion($userMail);
         return $sql;
     }
 

@@ -28,13 +28,17 @@ class EmployeService
     {
         $employeDAO = new EmployeDAO;
         $droitAdmin = $employeDAO->droitAdmin();
-        return $droitAdmin;
+        $finalListeSup = [];
+        foreach ($droitAdmin as $sup) {
+            $finalListeSup[] = $sup[0];
+        }
+        return $finalListeSup;
     }
 
-    public function ajoutEmploye(int $noemp, string $nom, string $prenom, string $emploi, int $sup, string $embauche, float $sal, float $comm, int $noserv, int $noproj): void
+    public function ajoutEmploye($employe): void
     {
         $employeDAO = new EmployeDAO;
-        $employeDAO->ajoutEmploye($noemp, $nom, $prenom, $emploi, $sup, $embauche, $sal, $comm, $noserv, $noproj);
+        $employeDAO->ajoutEmploye($employe);
     }
 
     public function suppression($pos): void

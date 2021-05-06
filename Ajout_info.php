@@ -1,76 +1,73 @@
 <?php
 include("Connection_Mysqli.php");
+include_once(__DIR__ . "/model/Employe.php");
 include_once(__DIR__ . "/DAO/EmployeDAO.php");
 
-$noemp = $_POST["noemp"];
-$nom = $_POST["nom"];
-$prenom = $_POST["prenom"];
-$emploi = $_POST["emploi"];
-$sup = $_POST["sup"];
-$embauche = $_POST["embauche"];
-$sal = $_POST["sal"];
-$comm = $_POST["comm"];
-$noserv = $_POST["noserv"];
-$noproj = $_POST["noproj"];
+$employe = (new Employe)
+    ->setNoemp($_POST["noemp"])
+    ->setNom($_POST["nom"])
+    ->setPrenom($_POST["prenom"])
+    ->setEmploi($_POST["emploi"])
+    ->setSup($_POST["sup"])
+    ->setEmbauche($_POST["embauche"])
+    ->setSal($_POST["sal"])
+    ->setComm($_POST["comm"])
+    ->setNoserv($_POST["noserv"])
+    ->setNoproj($_POST["noproj"]);
 
-$isThereError = false;
-$message = "";
 
-if (empty($noemp) || preg_match("#^[0-9]{4}$#", $noemp)) {
-} else {
-    $isThereError = true;
-    $message = $message . "a";
-}
-if (empty($nom) || preg_match("#^[a-z -]{2,20}$#i", $nom)) {
-} else {
-    $isThereError = true;
-    $message = $message . "b";
-}
-if (empty($prenom) || preg_match("#^[a-z -]{2,20}$#i", $prenom)) {
-} else {
-    $isThereError = true;
-    $message = $message . "c";
-}
-if (empty($emploi) || preg_match("#^[a-z -]{2,20}$#i", $emploi)) {
-} else {
-    $isThereError = true;
-    $message = $message . "d";
-}
-if (empty($sup) || preg_match("#^([12][0-9]{3})?$#", $sup)) {
-} else {
-    $isThereError = true;
-    $message = $message . "e";
-}
-if (empty($embauche) || preg_match("#^(?:19|20)[0-9]{2}[-\\/ ]?(0?[1-9]|1[0-2])[-\\/ ]?(0?[1-9]|[12][0-9]|3[01])$#", $embauche)) {
-} else {
-    $isThereError = true;
-    $message = $message . "f";
-}
-if (empty($sal) || preg_match("#^[1-9][0-9]{3,8}$#", $sal)) {
-} else {
-    $isThereError = true;
-    $message = $message . "g";
-}
-if (empty($comm) || preg_match("#^([1-9][0-9]{2,8})?$#", $comm)) {
-} else {
-    $isThereError = true;
-    $message = $message . "h";
-}
-if (empty($noserv) || preg_match("#^[1-7]$#", $noserv)) {
-} else {
-    $isThereError = true;
-    $message = $message . "i";
-}
-if (empty($noproj) || preg_match("#^10[0-9]$#", $noproj)) {
-} else {
-    $isThereError = true;
-    $message = $message . "j";
-}
+$message = verifyInfoPourAjout($employe);
 
-if (!$isThereError) {
+if (!$message) {
     $employeService = new EmployeService();
-    $employeService->ajoutEmploye($noemp, $nom, $prenom, $emploi, $sup, $embauche, $sal, $comm, $noserv, $noproj);
+    $employeService->ajoutEmploye($employe);
     header("Location: Affiche_Fichier.php");
 } else {
     header("Location: Test_formulaire.php?error=$message");
+}
+
+function verifyInfoPourAjout($employe)
+{
+    $message = [];
+
+    if (empty($employe->getNoemp()) || !preg_match("#^[0-9]{4}$#", $employe->getNoemp())) {
+        $message = "<h4>\n- Numero Employes -</h4>";
+    }
+    if (empty($employe->getNom()) || preg_match("#^[a-z -]{2,20}$#i", $employe->getNom())) {
+    } else {
+        $message = "<h4>\n- Nom -</h4>";
+    }
+    if (empty($employe->getPrenom()) || preg_match("#^[a-z -]{2,20}$#i", $employe->getPrenom())) {
+    } else {
+        $message = "<h4>\n- Prenom -</h4>";
+    }
+    if (empty($employe->getEmploi()) || preg_match("#^[a-z -]{2,20}$#i", $employe->getEmploi())) {
+    } else {
+        $message = "<h4>\n- Emploi -</h4>";
+    }
+    if (empty($employe->getSup()) || preg_match("#^([12][0-9]{3})?$#", $employe->getSup())) {
+    } else {
+        $message = "<h4>\n- Numero du Supérieur -</h4>";
+    }
+    if (empty($employe->getEmbauche()) || preg_match("#^(?:19|20)[0-9]{2}[-\\/ ]?(0?[1-9]|1[0-2])[-\\/ ]?(0?[1-9]|[12][0-9]|3[01])$#", $employe->getEmbauche())) {
+    } else {
+        $message = "<h4>\n- Date Embauche -</h4>";
+    }
+    if (empty($employe->getSal()) || preg_match("#^[1-9][0-9]{3,8}$#", $employe->getSal())) {
+    } else {
+        $message = "<h4>\n- Salaire -</h4>";
+    }
+    if (empty($employe->getComm()) || preg_match("#^([1-9][0-9]{2,8})?$#", $employe->getComm())) {
+    } else {
+        $message = "<h4>\n- Commission -</h4>";
+    }
+    if (empty($employe->getNoserv()) || preg_match("#^[1-7]$#", $employe->getNoserv())) {
+    } else {
+        $message = "<h4>\n- Numero Service -</h4>";
+    }
+    if (empty($employe->getNoproj()) || preg_match("#^10[0-9]$#", $employe->getNoproj())) {
+    } else {
+        $message = "<h4>\n- Numero Projet -</h4>";
+    }
+    return $message;
 }

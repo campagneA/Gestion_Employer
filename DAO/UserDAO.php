@@ -1,10 +1,9 @@
 <?php
-
 class UserDAO
 {
-    function checkConnection($userMail)
+    function checkConnexion($userMail)
     {
-        $bdd = connectionMysqli();
+        $bdd = connexionMysqli();
         $stmt = $bdd->prepare("select * from userconnect where UserMail = ?;");
         $stmt->bind_param("s", $userMail);
         $stmt->execute();
@@ -17,7 +16,7 @@ class UserDAO
 
     function creationCompte($newUser, $newPass): void
     {
-        $bdd = connectionMysqli();
+        $bdd = connexionMysqli();
         $stmt = $bdd->prepare("insert into userconnect (UserMail, PassWord, Profil) values ('$newUser', '$newPass', 'User');");
         $stmt->bind_param("ss", $newUser, $newPass);
         $stmt->execute();

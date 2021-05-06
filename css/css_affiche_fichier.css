@@ -1,0 +1,64 @@
+body {
+  background-color: gray;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+table {
+  margin-top: 50px;
+}
+
+.position-compteur {
+  position: fixed;
+  top: 0%;
+  right: 2%;
+  background-color: black;
+  color: white;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.button-retour-bot {
+  text-decoration: none;
+  display: block;
+  width: 60px;
+  height: 25px;
+  text-align: center;
+  color: black;
+  background-color: whitesmoke;
+  border: 2px solid black;
+  position: fixed;
+  bottom: 0%;
+  left: 0%;
+}
+
+.button-retour-bot:hover {
+  background-color: black;
+  color: whitesmoke;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+  position: fixed;
+  left: 6px;
+  color: white;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+li a {
+  display: block;
+  text-decoration: none;
+  color: white;
+  padding: 14px 16px;
+}
+
+li a:hover {
+  background-color: #111;
+  color: white;
+}

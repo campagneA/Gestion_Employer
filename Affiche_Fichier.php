@@ -1,6 +1,8 @@
 <?php session_start();
-include("Connection_Mysqli.php");
+include("Connexion_Mysqli.php");
 include_once(__DIR__ . "/Service/EmployeService.php");
+include_once(__DIR__ . "/view/view_bouton.php");
+include_once(__DIR__ . "/view/view_employes.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -9,139 +11,32 @@ include_once(__DIR__ . "/Service/EmployeService.php");
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/css_affiche_fichier.css">
     <title>Tableau du fichier</title>
-    <style>
-        body {
-            background-image: url(../../Fil_Rouge_SquareEnix/Fil_Rouge/Logo/Fond_de_site_profil.jpg);
-            background-repeat: no-repeat;
-            background-size: cover;
-        }
 
-        table {
-            margin-top: 50px;
-        }
-
-        .position-compteur {
-            position: fixed;
-            top: 0%;
-            right: 2%;
-            background-color: black;
-            color: white;
-            padding-left: 30px;
-            padding-right: 30px;
-        }
-
-        .button-retour-bot {
-            text-decoration: none;
-            display: block;
-            width: 60px;
-            height: 25px;
-            text-align: center;
-            color: black;
-            background-color: whitesmoke;
-            border: 2px solid black;
-            position: fixed;
-            bottom: 0%;
-            left: 0%;
-        }
-
-        .button-retour-bot:hover {
-            background-color: black;
-            color: whitesmoke;
-        }
-
-        ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #333;
-            position: fixed;
-            left: 6px;
-            color: white;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        li a {
-            display: block;
-            text-decoration: none;
-            color: white;
-            padding: 14px 16px;
-        }
-
-        li a:hover {
-            background-color: #111;
-            color: white;
-        }
-    </style>
 </head>
 
 <body>
     <?php
-    if (!empty($_SESSION['userMail']) && isset($_SESSION['userMail'])) { ?>
-        <ul>
-            <li><a href="Deconnexion.php">Deconnexion</a></li>
-        </ul>
-    <?php } else { ?>
-        <ul>
-            <li><a href="Connection.php">Connection</a></li>
-        </ul>
-    <?php
+    if (!empty($_SESSION['userMail']) && isset($_SESSION['userMail'])) {
+        boutonDeconnexion();
+    } else {
+        boutonConnexion();
     }
     if (isset($_SESSION['userMail']) && !empty($_SESSION['userMail'])) {
         $employeService = new EmployeService;
-        $result = $employeService->searchInfo();
         $nbr = $employeService->compteurAjout();
 
-        echo "<h5 class='position-compteur'>Nombre d'Ajout Aujourd'hui : $nbr </h5>";
+        compteurAjoutToday($nbr);
 
+        $finalListeSup = $employeService->droitAdmin();
+        $result = $employeService->searchInfo();
 
-        $listeSup = $employeService->droitAdmin();
-        $finalListeSup = [];
-        foreach ($listeSup as $sup) {
-            $finalListeSup[] = $sup[0];
-        }
-        echo "<table class='table table-dark table-striped text-center'><tr><th>NOEMP</th><th>NOM</th><th>PRENOM</th><th>EMPLOI</th><th>SUP</th><th>EMBAUCHE</th>";
-        if ($_SESSION['pass'] == 'Admin') {
-            echo "<th>SALAIRE</th><th>COMMISSION</th>";
-        }
-        echo "<th>NOSERV</th><th>NOPROJ</th>";
-        if ($_SESSION['pass'] == 'Admin') {
-            echo "<th>#</th><th>#</th>";
-        }
-        echo "</tr>";
-        foreach ($result as $data) {
-            echo "<tr>";
-            echo "<td>" . $data["noemp"] . "</td>";
-            echo "<td>" . $data["nom"] . "</td>";
-            echo "<td>" . $data["prenom"] . "</td>";
-            echo "<td>" . $data["emploi"] . "</td>";
-            echo "<td>" . $data["sup"] . "</td>";
-            echo "<td>" . $data["embauche"] . "</td>";
-            if ($_SESSION['pass'] == 'Admin') {
-                echo "<td>" . $data["sal"] . "</td>";
-                echo "<td>" . $data["comm"] . "</td>";
-            }
-            echo "<td>" . $data["noserv"] . "</td>";
-            echo "<td>" . $data["noproj"] . "</td>";
-
-            if ($_SESSION['pass'] == 'Admin') {
-                if (array_search($data["noemp"], $finalListeSup) == false) {
-                    echo "<td><a class='btn btn-danger btn-sm' href='Demande_Supp.php?id=$data[noemp]'>X</a></td>";
-                } else {
-                    echo "<td></td>";
-                }
-                echo "<td><a class='btn btn-warning btn-sm' href='Modifier_info.php?id=$data[noemp]'>Modifier</a></td>";
-            }
-            echo "</tr>";
-        }
-        echo "</table>";
+        afficheEmployes($result, $_SESSION['pass'], $finalListeSup);
     }
+    boutonRetour();
     ?>
-    <a href="Test_formulaire.php" type="button" class="button-retour-bot">Retour</a>
 
 </body>
 

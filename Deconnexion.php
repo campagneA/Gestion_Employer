@@ -2,4 +2,4 @@
 session_start();
 session_unset();
 session_destroy();
-header("location: Connection.php");
+header("location: Connexion.php");

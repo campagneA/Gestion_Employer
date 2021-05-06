@@ -1,0 +1,54 @@
+body {
+  background-color: gray;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.background {
+  background-color: black;
+}
+
+h4 {
+  color: red;
+  text-align: center;
+}
+
+.position-bottom-left {
+  position: absolute;
+  bottom: 15%;
+  left: 83%;
+}
+
+.position-compteur {
+  position: absolute;
+  top: 0%;
+  right: 2%;
+  background-color: white;
+  font-size: 20px;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+  position: fixed;
+  left: 6px;
+  color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+li a {
+  display: block;
+  text-decoration: none;
+  color: white;
+  padding: 14px 16px;
+}
+
+li a:hover {
+  background-color: #111;
+  color: white;
+}

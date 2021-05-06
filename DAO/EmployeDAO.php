@@ -5,7 +5,7 @@ class EmployeDAO
 {
     function modifierInfo(Employe $employe): void
     {
-        $bdd = connectionMysqli();
+        $bdd = connexionMysqli();
         $stmt = $bdd->prepare("update employes2 set
         nom = ?,
         prenom = ?,
@@ -33,7 +33,7 @@ class EmployeDAO
 
     function searchInfo()
     {
-        $bdd = connectionMysqli();
+        $bdd = connexionMysqli();
         $stmt = $bdd->prepare("select * from employes2");
         $stmt->execute();
         $rs = $stmt->get_result();
@@ -45,6 +45,7 @@ class EmployeDAO
                 ->setPrenom($value["prenom"])
                 ->setEmploi($value["emploi"])
                 ->setSup($value["sup"])
+                ->setEmbauche($value["embauche"])
                 ->setSal($value["sal"])
                 ->setComm($value["comm"])
                 ->setNoserv($value["noserv"])
@@ -57,7 +58,7 @@ class EmployeDAO
 
     function compteurAjout(): int
     {
-        $bdd = connectionMysqli();
+        $bdd = connexionMysqli();
         $stmt = $bdd->prepare("select count(*) from employes2 where date_ajout = CURDATE();");
         $stmt->execute();
         $rs = $stmt->get_result();
@@ -68,7 +69,7 @@ class EmployeDAO
 
     function droitAdmin()
     {
-        $bdd = connectionMysqli();
+        $bdd = connexionMysqli();
         $stmt = $bdd->prepare("select noemp from employes2 where noemp in (select sup from employes2);");
         $stmt->execute();
         $rs = $stmt->get_result();
@@ -77,19 +78,9 @@ class EmployeDAO
         return $data;
     }
 
-    function ajoutEmploye(int $noemp, string $nom, string $prenom, string $emploi, int $sup, string $embauche, float $sal, float $comm, int $noserv, int $noproj): void
+    function ajoutEmploye($employe): void
     {
-        $bdd = connectionMysqli();
-        $employe = (new Employe)->setNoemp($noemp)
-            ->setNom($nom)
-            ->setPrenom($prenom)
-            ->setEmploi($emploi)
-            ->setSup($sup)
-            ->setEmbauche($embauche)
-            ->setSal($sal)
-            ->setComm($comm)
-            ->setNoserv($noserv)
-            ->setNoproj($noproj);
+        $bdd = connexionMysqli();
         $stmt = $bdd->prepare("insert into employes2 values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURDATE())");
         $stmt->bind_param("isssisddii", $employe->getNoemp(), $employe->getNom(), $employe->getPrenom(), $employe->getEmploi(), $employe->getSup(), $employe->getEmbauche(), $employe->getSal(), $employe->getComm(), $employe->getNoserv(), $employe->getNoproj());
         $stmt->execute();
@@ -98,7 +89,7 @@ class EmployeDAO
 
     function suppression($pos): void
     {
-        $bdd = connectionMysqli();
+        $bdd = connexionMysqli();
         $stmt = $bdd->prepare("delete from employes2 where noemp = $pos");
         $stmt->execute();
         $bdd->close();
@@ -106,7 +97,7 @@ class EmployeDAO
 
     function searchInfoModifier($noemp)
     {
-        $bdd = connectionMysqli();
+        $bdd = connexionMysqli();
         $stmt = $bdd->prepare("select * from employes2 where noemp = $noemp");
         $stmt->execute();
         $rs = $stmt->get_result();

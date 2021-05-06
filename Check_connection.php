@@ -1,9 +1,9 @@
 <?php
-include("Connection_Mysqli.php");
+include("Connexion_Mysqli.php");
 include_once(__DIR__ . "/Service/UserService.php");
 
 $userService = new UserService;
-$sql = $userService->checkConnection($_POST['userMail']);
+$sql = $userService->checkConnexion($_POST['userMail']);
 if (!empty($sql) && isset($sql) && password_verify($_POST['passWord'], $sql['PassWord'])) {
     session_start();
     $_SESSION['userMail'] = "$_POST[userMail]";
