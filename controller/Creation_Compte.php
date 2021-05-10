@@ -1,6 +1,5 @@
 <?php
-include("Connection_Mysqli.php");
-include_once(__DIR__ . "/Service/UserService.php");
+include_once(__DIR__ . "/../Service/UserService.php");
 
 $userService = new userService;
 if (verifyInfo($_POST['newUser'], $_POST['newPass'], $_POST['newPassConf'])) {

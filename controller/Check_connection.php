@@ -1,6 +1,5 @@
 <?php
-include("Connexion_Mysqli.php");
-include_once(__DIR__ . "/Service/UserService.php");
+include_once(__DIR__ . "/../Service/UserService.php");
 
 $userService = new UserService;
 $sql = $userService->checkConnexion($_POST['userMail']);

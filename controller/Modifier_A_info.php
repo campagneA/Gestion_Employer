@@ -1,6 +1,5 @@
 <?php
 session_start();
-include("Connection_Mysqli.php");
 include_once(__DIR__ . "/Service/EmployeService.php");
 
 $employe = (new Employe)

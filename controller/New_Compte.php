@@ -1,6 +1,6 @@
 <?php
-include_once(__DIR__ . "/view/view_bouton.php");
-include_once(__DIR__ . "/view/view_user.php");
+include_once(__DIR__ . "/../view/view_bouton.php");
+include_once(__DIR__ . "/../view/view_user.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,7 +10,7 @@ include_once(__DIR__ . "/view/view_user.php");
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connection</title>
-    <link rel="stylesheet" href="css/css_new_compte.css">
+    <link rel="stylesheet" href="../css/css_new_compte.css">
 </head>
 
 <body>

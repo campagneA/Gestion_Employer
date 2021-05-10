@@ -1,7 +1,6 @@
 <?php
-include("Connection_Mysqli.php");
-include_once(__DIR__ . "/model/Employe.php");
-include_once(__DIR__ . "/DAO/EmployeDAO.php");
+include_once(__DIR__ . "/../model/Employe.php");
+include_once(__DIR__ . "/../DAO/EmployeDAO.php");
 
 $employe = (new Employe)
     ->setNoemp($_POST["noemp"])

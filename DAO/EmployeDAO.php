@@ -1,11 +1,12 @@
 <?php
 include_once(__DIR__ . "/../model/Employe.php");
+include_once(__DIR__ . "/commonDAO.php");
 
-class EmployeDAO
+class EmployeDAO extends CommonDAO
 {
     function modifierInfo(Employe $employe): void
     {
-        $bdd = connexionMysqli();
+        $bdd = $this->connexionMysqli();
         $stmt = $bdd->prepare("update employes2 set
         nom = ?,
         prenom = ?,
@@ -33,7 +34,7 @@ class EmployeDAO
 
     function searchInfo()
     {
-        $bdd = connexionMysqli();
+        $bdd = $this->connexionMysqli();
         $stmt = $bdd->prepare("select * from employes2");
         $stmt->execute();
         $rs = $stmt->get_result();
@@ -58,7 +59,7 @@ class EmployeDAO
 
     function compteurAjout(): int
     {
-        $bdd = connexionMysqli();
+        $bdd = $this->connexionMysqli();
         $stmt = $bdd->prepare("select count(*) from employes2 where date_ajout = CURDATE();");
         $stmt->execute();
         $rs = $stmt->get_result();
@@ -69,7 +70,7 @@ class EmployeDAO
 
     function droitAdmin()
     {
-        $bdd = connexionMysqli();
+        $bdd = $this->connexionMysqli();
         $stmt = $bdd->prepare("select noemp from employes2 where noemp in (select sup from employes2);");
         $stmt->execute();
         $rs = $stmt->get_result();
@@ -80,7 +81,7 @@ class EmployeDAO
 
     function ajoutEmploye($employe): void
     {
-        $bdd = connexionMysqli();
+        $bdd = $this->connexionMysqli();
         $stmt = $bdd->prepare("insert into employes2 values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURDATE())");
         $stmt->bind_param("isssisddii", $employe->getNoemp(), $employe->getNom(), $employe->getPrenom(), $employe->getEmploi(), $employe->getSup(), $employe->getEmbauche(), $employe->getSal(), $employe->getComm(), $employe->getNoserv(), $employe->getNoproj());
         $stmt->execute();
@@ -89,7 +90,7 @@ class EmployeDAO
 
     function suppression($pos): void
     {
-        $bdd = connexionMysqli();
+        $bdd = $this->connexionMysqli();
         $stmt = $bdd->prepare("delete from employes2 where noemp = $pos");
         $stmt->execute();
         $bdd->close();
@@ -97,7 +98,7 @@ class EmployeDAO
 
     function searchInfoModifier($noemp)
     {
-        $bdd = connexionMysqli();
+        $bdd = $this->connexionMysqli();
         $stmt = $bdd->prepare("select * from employes2 where noemp = $noemp");
         $stmt->execute();
         $rs = $stmt->get_result();

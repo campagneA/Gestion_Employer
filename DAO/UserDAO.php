@@ -1,9 +1,12 @@
 <?php
-class UserDAO
+
+include_once(__DIR__ . "/commonDAO.php");
+
+class UserDAO extends CommonDAO
 {
     function checkConnexion($userMail)
     {
-        $bdd = connexionMysqli();
+        $bdd = $this->connexionMysqli();
         $stmt = $bdd->prepare("select * from userconnect where UserMail = ?;");
         $stmt->bind_param("s", $userMail);
         $stmt->execute();
@@ -16,7 +19,7 @@ class UserDAO
 
     function creationCompte($newUser, $newPass): void
     {
-        $bdd = connexionMysqli();
+        $bdd = $this->connexionMysqli();
         $stmt = $bdd->prepare("insert into userconnect (UserMail, PassWord, Profil) values ('$newUser', '$newPass', 'User');");
         $stmt->bind_param("ss", $newUser, $newPass);
         $stmt->execute();
