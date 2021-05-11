@@ -2,6 +2,7 @@
 include_once(__DIR__ . "/../Service/EmployeService.php");
 include_once(__DIR__ . "/../view/view_bouton.php");
 include_once(__DIR__ . "/../view/view_employes.php");
+include_once(__DIR__ . "/../exception/serviceException.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,12 +26,25 @@ include_once(__DIR__ . "/../view/view_employes.php");
     }
     if (!empty($_SESSION['userMail']) && isset($_SESSION['userMail'])) {
         $employeService = new EmployeService;
+        try {
         $nbr = $employeService->compteurAjout();
+        } catch (serviceException $a){
+            afficheError($a);
+        }
 
         compteurAjoutToday($nbr);
 
-        $finalListeSup = $employeService->droitAdmin();
-        $result = $employeService->searchInfo();
+        try {
+            $finalListeSup = $employeService->droitAdmin();
+        } catch (serviceException $a) {
+            afficheError($a);
+        }
+
+        try {
+            $result = $employeService->searchInfo();
+        } catch (serviceException $a) {
+            afficheError($a);
+        }
 
         afficheEmployes($result, $_SESSION['pass'], $finalListeSup);
     }

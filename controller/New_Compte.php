@@ -1,6 +1,8 @@
 <?php
 include_once(__DIR__ . "/../view/view_bouton.php");
 include_once(__DIR__ . "/../view/view_user.php");
+include_once(__DIR__ . "/../Service/UserService.php");
+include_once(__DIR__ . "/../exception/serviceException.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,11 +17,39 @@ include_once(__DIR__ . "/../view/view_user.php");
 
 <body>
     <?php
-    if (isset($_GET['error']) == "error") {
-        echo "<p>Erreur de saisie !!!</p>";
+    if ($_POST){
+        try {
+            $userService = new userService;
+            if (verifyInfo($_POST['newUser'], $_POST['newPass'], $_POST['newPassConf'])) {
+                $userService->creationCompte($_POST['newUser'], $_POST['newPass']);
+                header("location: Connection.php");
+            } else {
+                header("location: New_Compte.php?error=error");
+            }
+        } catch (serviceException $a) {
+            afficheError($a);
+        }
+    } else {
+        if (isset($_GET['error']) == "error") {
+            echo "<p>Erreur de saisie !!!</p>";
+        }
+        boutonRetourUser();
+        formulaireInscriptionUser();
     }
-    boutonRetourUser();
-    formulaireInscriptionUser();
+    
+function verifyInfo($newUser, $newPass, $newPassConf)
+{
+    if (
+        !empty($newPass) &&
+        !empty($newPassConf) &&
+        !empty($newUser) &&
+        preg_match('#^([\w\.-.]+)@([\w\.-]+)(\.[a-z]{2,4})$#', $newUser) &&
+        $newPass == $newPassConf
+    ) {
+        return true;
+    }
+    return false;
+}
     ?>
 
 </body>

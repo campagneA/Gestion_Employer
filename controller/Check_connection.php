@@ -2,8 +2,7 @@
 include_once(__DIR__ . "/../Service/UserService.php");
 
 $userService = new UserService;
-$sql = $userService->checkConnexion($_POST['userMail']);
-if (!empty($sql) && isset($sql) && password_verify($_POST['passWord'], $sql['PassWord'])) {
+if ($userService->checkConnexion($_POST['userMail'], $_POST['userPass']) != null) {
     session_start();
     $_SESSION['userMail'] = "$_POST[userMail]";
     $_SESSION['pass'] = "$sql[Profil]";

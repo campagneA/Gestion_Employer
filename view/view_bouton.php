@@ -34,10 +34,26 @@ function boutonRetourUser()
 <?php
 }
 
+function boutonRetourAccueilUser()
+{ 
+?>
+    <ul>
+        <li><a href="Test_formulaire.php">Retour</a></li>
+    </ul>
+<?php
+}
+
 function boutonAfficheModifier()
 {
 ?>
     <a class="btn btn-primary position-bottom-left" href="Affiche_Fichier.php">--Afficher/Modifier les données--</a>
+<?php
+}
+
+function boutonRetourEmploye()
+{
+?>
+    <a href='Affiche_Fichier.php'>retour</a>
 <?php
 }
 ?>

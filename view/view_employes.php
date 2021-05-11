@@ -53,8 +53,8 @@ function afficheEmployes($result, string $session, $finalListeSup)
                     <td></td>
                 <?php } ?>
         </tr>
-    <?php } ?>
-<?php } ?>
+    <?php       } 
+            } ?>
     </table>
 <?php
 }
@@ -157,7 +157,7 @@ function formulaireInscriptionEmployer()
 function afficheInfoEmploye($result)
 {
 ?>
-    <form method='POST' action='Modifier_A_info.php'>
+    <form method='POST' action='Modifier_info.php'>
         <table class='table table-dark table-striped text-center'>
 
             <tr>
@@ -187,3 +187,17 @@ function afficheInfoEmploye($result)
     </form>
 <?php
 }
+
+function afficheMsgErreur($message)
+{
+    $i = 0;      
+?>
+    <div class='background'><h4>Erreur de saisie :</h4>
+<?php
+    for ($i = 0; $i < count($message); $i++) {
+        echo $message[$i];
+    } ?>
+    </div>
+<?php
+}
+?>

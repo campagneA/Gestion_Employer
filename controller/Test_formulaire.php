@@ -17,31 +17,12 @@ include_once(__DIR__ . "/../view/view_employes.php"); ?>
   <?php
   if (isset($_SESSION['userMail']) && !empty($_SESSION['userMail'])) {
     boutonDeconnexion();
+    if (isset($_GET["error"])) {
+      afficheMsgErreur($_GET["error"]);
+    }
   } else {
     boutonConnexion();
   }
-
-  if (isset($_SESSION['userMail']) && !empty($_SESSION['userMail'])) {
-    $fp = fopen("compteur.txt", "r+");
-    $nbvisites = fgets($fp, 10);
-    if ($nbvisites == "") {
-      $nbvisites = 0;
-    }
-    $nbvisites++;
-    fseek($fp, 0);
-    fputs($fp, $nbvisites);
-    fclose($fp);
-    echo "<p class='position-compteur'>Nombre de visiteurs total: $nbvisites</p>";
-    if (isset($_GET["error"])) {
-      $i = 0;
-      $message = $_GET["error"];
-      echo "<div class='background'><h4>Erreur de saisie :</h4>";
-      for ($i = 0; $i < count($message); $i++) {
-        echo $message[$i];
-      }
-    }
-    echo "</div>";
-  };
 
   formulaireInscriptionEmployer();
   boutonAfficheModifier();

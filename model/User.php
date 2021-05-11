@@ -28,4 +28,15 @@ class User
         $this->profil = $profil;
         return $this;
     }
+
+    public function getPassWord(): string
+    {
+        return $this->passWord;
+    }
+
+    public function setPassWord(string $passWord): self
+    {
+        $this->passWord = $passWord;
+        return $this;
+    }
 }
